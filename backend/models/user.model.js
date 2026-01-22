@@ -22,4 +22,4 @@ const userSchema = mongoose.Schema({
     timestamps: true,
     versionKey: false
   })
-export const user = mongoose.model('user',userSchema)
+export const User = mongoose.model('User',userSchema)
