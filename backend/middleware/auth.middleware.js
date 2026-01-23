@@ -11,8 +11,12 @@ export const protect = asyncHandler( async (req,res,next) => {
       req.user = await User.findById(decoded.userId).select('-password')
       next()
     } catch (error) {
-      console.error()
-
+      res.status(401)
+      throw new Error('not authorized')
     }
+  }
+  else {
+    res.status(401)
+    throw new Error('not authorized')
   }
 })

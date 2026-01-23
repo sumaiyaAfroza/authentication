@@ -2,6 +2,7 @@ import asyncHandler from "express-async-handler";
 import {User} from "../models/user.model.js";
 import {generateToken} from "../utils/generate.token.js";
 
+// register
 export const registerUser = asyncHandler(async (req,res) => {
   const {name, email, password} = req.body
   const  userExists = await  User.findOne({email})
@@ -27,6 +28,8 @@ export const registerUser = asyncHandler(async (req,res) => {
   }
 })
 
+
+// login
 export const authUser = asyncHandler(async  (req,res) => {
   const {email, password} = req.body
 
@@ -46,6 +49,8 @@ export const authUser = asyncHandler(async  (req,res) => {
   }
 })
 
+
+// logout
 export const logout = asyncHandler(async (req, res) => {
   // best practice
   res.clearCookie('jwt', {
@@ -61,6 +66,7 @@ export const logout = asyncHandler(async (req, res) => {
   //   expires: new Date(0)
   // })
 })
+
 
 // get user profile
 export const getUserProfile = asyncHandler( async (req,res) => {
