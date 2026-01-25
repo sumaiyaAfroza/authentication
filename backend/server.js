@@ -3,6 +3,7 @@ import {connectDB} from "./config/db.js";
 import cors from 'cors'
 import {router as user} from "./routes/user.routes.js";
 import cookieParser from "cookie-parser";
+import {errorHandler, notFound} from "./middleware/error.middleware.js";
 
 const app = express()
 const port = process.env.PORT || 3000
@@ -21,6 +22,9 @@ app.get('/', (req,res) => {
 
 // routes
 app.use('/api/user', user)
+
+app.use(notFound)
+app.use(errorHandler)
 
 app.listen(port, (res, req)=> {
   console.log(`server auth ok ${port}`)
