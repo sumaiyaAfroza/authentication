@@ -1,6 +1,12 @@
-import React from 'react';
+import React, {useState} from 'react';
+import {Link} from "react-router";
+import {FaBars, FaSignInAlt, FaSignOutAlt, FaTimes, FaUser} from "react-icons/fa";
+
 
 const Header = () => {
+  const [isOpen, setIsOpen] = useState(false)
+  const [dropdownOpen, setDropdownOpen] = useState(false)
+
   return (
     <header className="bg-gray-900 text-white shadow-lg">
       <nav className="container mx-auto px-4">
