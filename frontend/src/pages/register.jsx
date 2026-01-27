@@ -1,12 +1,27 @@
 import React, {useState} from 'react';
 import {Link} from "react-router";
 import FormContainer from "../component/form.container.jsx";
+import {userRegisterMutation} from "../slices/user.api.slice.js";
 
 const Register = () => {
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
+  const [register] = userRegisterMutation()
+
+  const submitHandler = async (e) => {
+    e.preventDefault()
+    if(password !== confirmPassword) {
+      console.log('password don't match)
+    }
+    else {
+      try {
+        const res = await  register({name,email,password})
+        dispatc
+      }
+    }
+  }
 
   return (
     <FormContainer>
