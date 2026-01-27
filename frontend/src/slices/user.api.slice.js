@@ -1,6 +1,6 @@
 import {apiSlice} from "./api.slice.js";
 
- const userUrl = process.env.USER_URL
+ const userUrl = '/api/user'
 export const userApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     register: builder.mutation({
@@ -8,7 +8,8 @@ export const userApiSlice = apiSlice.injectEndpoints({
         url: `${userUrl}/register`,
         method: 'POST',
         body: data
-      })
+      }),
+      invalidatesTags: ['user']
     })
   })
 })

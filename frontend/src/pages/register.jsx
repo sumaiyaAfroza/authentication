@@ -1,14 +1,33 @@
 import React, {useState} from 'react';
 import {Link} from "react-router";
 import FormContainer from "../component/form.container.jsx";
-import {userRegisterMutation} from "../slices/user.api.slice.js";
+
+import Loader from "../component/Loader.jsx";
+import {useRegisterMutation} from "../slices/user.api.slice.js";
+import {toast} from "react-toastify";
 
 const Register = () => {
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
-  const [register] = userRegisterMutation()
+  const [register ,{isLoading}] = useRegisterMutation()
+
+  const submitHandler = async (e) => {
+    e.preventDefault()
+    if(password !== confirmPassword) {
+      toast.error('password dont match')
+    }
+    else {
+     try {
+       const res = await register({name,email,password}).unwrap()
+       toast.success('registration successful')
+     }
+     catch (error) {
+       toast.error(error?.data?.message || error.error)
+     }
+    }
+  }
 
 
   return (
