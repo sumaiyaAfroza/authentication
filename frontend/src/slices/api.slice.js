@@ -21,6 +21,7 @@ const baseQueryWithError = async (args, api , extraOptions ) => {
 
 export const apiSlice = createApi({
   baseQuery : baseQueryWithError,
-  tagTypes: ['user']
+  tagTypes: ['user'],
+  endpoints: (build) => ({})
 
 })

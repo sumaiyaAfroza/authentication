@@ -10,18 +10,6 @@ const Register = () => {
   const [confirmPassword, setConfirmPassword] = useState("")
   const [register] = userRegisterMutation()
 
-  const submitHandler = async (e) => {
-    e.preventDefault()
-    if(password !== confirmPassword) {
-      console.log('password don't match)
-    }
-    else {
-      try {
-        const res = await  register({name,email,password})
-        dispatc
-      }
-    }
-  }
 
   return (
     <FormContainer>
