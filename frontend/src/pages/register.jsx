@@ -5,6 +5,8 @@ import FormContainer from "../component/form.container.jsx";
 import Loader from "../component/Loader.jsx";
 import {useRegisterMutation} from "../slices/user.api.slice.js";
 import {toast} from "react-toastify";
+import {useDispatch} from "react-redux";
+import {setCredentials} from "../slices/auth.slice.js";
 
 const Register = () => {
   const [name, setName] = useState("")
@@ -12,6 +14,7 @@ const Register = () => {
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
   const [register ,{isLoading}] = useRegisterMutation()
+  const dispatch = useDispatch()
 
   const submitHandler = async (e) => {
     e.preventDefault()
@@ -21,6 +24,7 @@ const Register = () => {
     else {
      try {
        const res = await register({name,email,password}).unwrap()
+       dispatch(setCredentials({...res}))
        toast.success('registration successful')
      }
      catch (error) {

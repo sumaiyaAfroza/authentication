@@ -23,5 +23,4 @@ export const apiSlice = createApi({
   baseQuery : baseQueryWithError,
   tagTypes: ['user'],
   endpoints: (builder) => ({})
-
 })
