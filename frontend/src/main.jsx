@@ -7,6 +7,7 @@ import HomeScreen from "./component/home.screen.jsx";
 import Register from "./pages/register.jsx";
 import {Provider} from "react-redux";
 import {store} from "../utils/store.js";
+import {ToastContainer} from "react-toastify";
 
 
 const router = createBrowserRouter(
@@ -22,6 +23,7 @@ const router = createBrowserRouter(
 createRoot(document.getElementById('root')).render(
 
     <Provider store={store} >
+      <ToastContainer/>
       <RouterProvider router={router}/>
     </Provider>
 
