@@ -10,6 +10,7 @@ import {store} from "../utils/store.js";
 import {ToastContainer} from "react-toastify";
 import Login from "./pages/Login.jsx";
 import Profile from "./pages/Profile.jsx";
+import UpdateProfile from "./pages/updateProfile.jsx";
 
 
 const router = createBrowserRouter(
@@ -19,6 +20,7 @@ const router = createBrowserRouter(
       <Route path={'/register'} element={<Register/>} />
       <Route path={'/login'} element={<Login/>}/>
       <Route path={'/profile'} element={<Profile/>}/>
+      <Route path={'/updateProfile'} element={<UpdateProfile/>}/>
     </Route>
   )
 )

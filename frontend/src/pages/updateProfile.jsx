@@ -1,21 +1,22 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import FormContainer from '../components/FormContainer';
 import { toast } from 'react-toastify';
-import {useUpdateUserMutation} from '../slices/users.api.slice.js';
 import {setCredentials} from '../slices/auth.slice.js';
-import {Loader} from '../components/loader.jsx';
+import Loader from "../component/Loader.jsx";
+import FormContainer from "../component/form.container.jsx";
+import {useUpdateProfileMutation} from "../slices/user.api.slice.js";
+import {useNavigate} from "react-router";
+
 
 const updateProfile = () => {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-
+const navigate = useNavigate()
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.auth);
-
-  const [updateProfile, { isLoading }] = useUpdateUserMutation();
+  const [updateProfile, { isLoading }] = useUpdateProfileMutation();
 
   useEffect(() => {
     setName(userInfo.name);
@@ -36,6 +37,7 @@ const updateProfile = () => {
         }).unwrap();
         console.log(res);
         dispatch(setCredentials(res));
+        navigate('/')
         toast.success('Profile updated successfully');
       } catch (err) {
         toast.error(err?.data?.message || err.error);
@@ -119,7 +121,7 @@ const updateProfile = () => {
           {isLoading ? 'Updating...' : 'Update'}
         </button>
 
-        {/* Loader */}
+
         {isLoading && (
           <div className='mt-4'>
             <Loader />

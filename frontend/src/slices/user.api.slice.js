@@ -1,10 +1,11 @@
 import {apiSlice} from "./api.slice.js";
 
- const userUrl = '/api/user'
+const userUrl = '/api/user'
+
 export const userApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
 
-    //  register
+    // register
     register: builder.mutation({
       query: data => ({
         url: `${userUrl}/register`,
@@ -14,51 +15,51 @@ export const userApiSlice = apiSlice.injectEndpoints({
       invalidatesTags: ['user']
     }),
 
-   //  logout user
-   logout: builder.mutation({
-    query: () => ({
-      url: `${userUrl}/logout`,
-      method: "POST"
-      }),
-     invalidatesTags: ['user']
-   }),
-
- // login
-     login: builder.mutation({
-      query: (data) => ({
+    // logout user
+    logout: builder.mutation({
+      query: () => ({
         url: `${userUrl}/logout`,
+        method: "POST"
+      }),
+      invalidatesTags: ['user']
+    }),
+
+    // login - ✅ URL ঠিক করা হয়েছে
+    login: builder.mutation({
+      query: (data) => ({
+        url: `${userUrl}/login`,  // ✅ এখন সঠিক
         method: "POST",
         body: data
       }),
       invalidatesTags: ['user']
     }),
 
-     //    profile get
+    // profile get
     getProfile: builder.query({
       query: () => ({
         url: `${userUrl}/profile`,
-        method:"Get"
+        method: "GET"
       }),
       providesTags: ['user']
     }),
 
-     //   update profile
+    // update profile - ✅ comma যোগ করা হয়েছে
     updateProfile: builder.mutation({
       query: (data) => ({
         url: `${userUrl}/profile`,
-        method: "put",
+        method: "PUT",
         body: data
-      })
+      }),  // ✅ এখন comma আছে
       invalidatesTags: ['user']
     })
- })
+
+  })
 })
 
-
 export const {
-   useRegisterMutation,
-  useLogoutMutation ,
-  useLoginMutation ,
+  useRegisterMutation,
+  useLogoutMutation,
+  useLoginMutation,
   useGetProfileQuery,
   useUpdateProfileMutation
 } = userApiSlice
