@@ -8,6 +8,8 @@ import Register from "./pages/register.jsx";
 import {Provider} from "react-redux";
 import {store} from "../utils/store.js";
 import {ToastContainer} from "react-toastify";
+import Login from "./pages/Login.jsx";
+import Profile from "./pages/Profile.jsx";
 
 
 const router = createBrowserRouter(
@@ -15,7 +17,8 @@ const router = createBrowserRouter(
     <Route path='/' element={<App/>}>
       <Route index={true} path={'/'} element={<HomeScreen/>} />
       <Route path={'/register'} element={<Register/>} />
-
+      <Route path={'/login'} element={<Login/>}/>
+      <Route path={'/profile'} element={<Profile/>}/>
     </Route>
   )
 )
