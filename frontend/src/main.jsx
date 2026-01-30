@@ -11,6 +11,7 @@ import {ToastContainer} from "react-toastify";
 import Login from "./pages/Login.jsx";
 import Profile from "./pages/Profile.jsx";
 import UpdateProfile from "./pages/updateProfile.jsx";
+import {PrivateRoute} from "./component/private.route.jsx";
 
 
 const router = createBrowserRouter(
@@ -19,15 +20,20 @@ const router = createBrowserRouter(
       <Route index={true} path={'/'} element={<HomeScreen/>} />
       <Route path={'/register'} element={<Register/>} />
       <Route path={'/login'} element={<Login/>}/>
-      <Route path={'/profile'} element={<Profile/>}/>
-      <Route path={'/updateProfile'} element={<UpdateProfile/>}/>
+
+      <Route path=''  element={<PrivateRoute/>}>
+        <Route path={'/profile'} element={<Profile/>}/>
+        <Route path={'/updateProfile'} element={<UpdateProfile/>}/>
+      </Route>
     </Route>
   )
 )
 
 createRoot(document.getElementById('root')).render(
-    <Provider store={store} >
-      <ToastContainer/>
-      <RouterProvider router={router}/>
-    </Provider>
+
+      <Provider store={store} >
+        <ToastContainer/>
+        <RouterProvider router={router}/>
+      </Provider>
+
 )
