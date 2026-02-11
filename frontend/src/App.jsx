@@ -1,14 +1,13 @@
 import React from 'react';
-
+import Header from "./components/Header.jsx";
 import {Outlet} from "react-router";
-import Header from "./component/Header.jsx";
+
 
 const App = () => {
   return (
     <div>
       <Header/>
       <Outlet/>
-      
     </div>
   );
 };

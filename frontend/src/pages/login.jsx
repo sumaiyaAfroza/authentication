@@ -1,25 +1,20 @@
-import { useState, useEffect } from 'react';
+import {useState, useEffect, Component} from 'react';
 import { Link, useNavigate } from 'react-router';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-
-import {setCredentials} from '../slices/auth.slice.js';
-
-import FormContainer from "../component/form.container.jsx";
-import {useLoginMutation} from "../slices/user.api.slice.js";
-import Loader from "../component/Loader.jsx";
-
+import {useLoginMutation} from "../slice/user.api.slice.js";
+import FormContainer from "../components/Form.container.jsx";
+import {setCredentials} from "../slice/auth.slice.js";
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   const [login, { isLoading }] = useLoginMutation();
   const { userInfo } = useSelector((state) => state.auth);
+
 
   useEffect(() => {
     if (userInfo) {
@@ -32,6 +27,7 @@ const Login = () => {
     try {
       const res = await login({ email, password }).unwrap();
       dispatch(setCredentials({ ...res }));
+      toast.success('login successfull')
       navigate('/');
     } catch (err) {
       toast.error(err?.data?.message || err.error);
@@ -104,3 +100,24 @@ const Login = () => {
 };
 
 export default Login;
+
+
+
+
+// const [login] = useLoginMutation()
+//
+      // // User login button click করলে:
+
+// await login({ email, password })
+//     ↓
+// 1. Action dispatch হয় → middleware chain এ যায়
+//     ↓
+// 2. redux-thunk → async action handle করে
+//     ↓
+// 3. apiSlice.middleware → API request পাঠায়
+//     ↓
+// 4. Response আসলে cache করে
+//     ↓
+// 5. Reducer update করে
+//     ↓
+// 6. UI automatically update হয়

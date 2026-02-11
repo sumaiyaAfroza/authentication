@@ -1,53 +1,53 @@
-import { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
-import {setCredentials} from '../slices/auth.slice.js';
-import Loader from "../component/Loader.jsx";
-import FormContainer from "../component/form.container.jsx";
-import {useUpdateProfileMutation} from "../slices/user.api.slice.js";
-import {useNavigate} from "react-router";
+import React, {useEffect, useState} from 'react';
+import {Link, useNavigate} from "react-router";
+import {useRegisterMutation} from "../slice/user.api.slice.js";
+import {toast} from "react-toastify";
+import {useDispatch, useSelector} from "react-redux";
+import FormContainer from "../components/Form.container.jsx";
+import Loader from "../components/Loader.jsx";
+import {setCredentials} from "../slice/auth.slice.js";
 
-
-const updateProfile = () => {
-  const [email, setEmail] = useState('');
-  const [name, setName] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-const navigate = useNavigate()
-  const dispatch = useDispatch();
+const Register = () => {
+  const [name, setName] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
+  const [register ,{isLoading}] = useRegisterMutation()
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
   const { userInfo } = useSelector((state) => state.auth);
-  const [updateProfile, { isLoading }] = useUpdateProfileMutation();
 
   useEffect(() => {
-    setName(userInfo.name);
-    setEmail(userInfo.email);
-  }, [userInfo.email, userInfo.name]);
+    if (userInfo) {
+      navigate('/');
+    }
+  }, [navigate, userInfo]);
+
+  // এই useEffect টি করছে:
+  // Component mount হওয়ার সাথে সাথে check করছে user already logged in আছে কিনা
+  // যদি user ইতিমধ্যে logged in থাকে, তাহলে তাকে সরাসরি home page এ নিয়ে যাবে
+  // এটি browser back button এর সমস্যা solve করে
 
   const submitHandler = async (e) => {
-    e.preventDefault();
-    if (password !== confirmPassword) {
-      toast.error('Passwords do not match');
-    } else {
+    e.preventDefault()
+    if(password !== confirmPassword) {
+      toast.error('password not match')
+    }
+    else {
       try {
-        const res = await updateProfile({
-          _id: userInfo._id,
-          name,
-          email,
-          password,
-        }).unwrap();
-        console.log(res);
-        dispatch(setCredentials(res));
-        navigate('/')
-        toast.success('Profile updated successfully');
-      } catch (err) {
-        toast.error(err?.data?.message || err.error);
+        const res = await register({name,email, password}).unwrap()
+        dispatch(setCredentials({...res}))  /*Redux এ সবসময় dispatch(actionCreator(payload)) pattern follow করতে হয়।*/
+        toast.success('registration successfull')
+       navigate('/')
+      } catch (error) {
+        toast.error(error?.data?.message || error.error)
       }
     }
-  };
+  }
 
   return (
     <FormContainer>
-      <h1 className='text-3xl font-bold text-center mb-6 text-gray-800'>Update Profile</h1>
+      <h1 className='text-3xl font-bold text-center mb-6 text-gray-800'>Register</h1>
 
       <form onSubmit={submitHandler}>
         {/* Name Field */}
@@ -94,6 +94,7 @@ const navigate = useNavigate()
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+            required
           />
         </div>
 
@@ -109,6 +110,7 @@ const navigate = useNavigate()
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+            required
           />
         </div>
 
@@ -118,18 +120,26 @@ const navigate = useNavigate()
           type='submit'
           className='w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed'
         >
-          {isLoading ? 'Updating...' : 'Update'}
+          {isLoading ? 'Registering...' : 'Register'}
         </button>
 
-
+        {/* Loader */}
         {isLoading && (
           <div className='mt-4'>
-            <Loader />
+            <Loader/>
           </div>
         )}
       </form>
+
+      {/* Login Link */}
+      <div className='py-4 text-center'>
+        <span className='text-gray-600'>Already have an account? </span>
+        <Link to='/login' className='text-blue-600 hover:text-blue-700 font-semibold'>
+          Login
+        </Link>
+      </div>
     </FormContainer>
   );
 };
 
-export default updateProfile;
+export default Register;
