@@ -10,7 +10,7 @@ const port = process.env.PORT || 3000
 
 connectDB()
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' ? 'https://authentication-xetn.vercel.app' : 'http://localhost:5173',
+  origin: process.env.NODE_ENV === 'production' ? 'https://authentication-six-psi.vercel.app/' : 'http://localhost:5173',
   credentials: true
 }))
 app.use(express.json())
