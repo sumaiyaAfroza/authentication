@@ -1,15 +1,12 @@
 {
-  "version": 2,
-  "builds": [
+  "rewrites": [
     {
-      "src": "server.js",
-      "use": "@vercel/node"
-    }
-  ],
-  "routes": [
+      "source": "/api/:path*",
+      "destination": "https://authentication-six-psi.vercel.app/:path*"
+    },
     {
-      "src": "/(.*)",
-      "dest": "server.js"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
