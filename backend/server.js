@@ -9,10 +9,18 @@ const app = express()
 const port = process.env.PORT || 3000
 
 connectDB()
+
+// ✅ CORS Configuration - এটা সবার আগে
 app.use(cors({
-  origin: '*',
-  credentials: true
+  origin: process.env.NODE_ENV === 'production'
+    ? 'https://authentication-xetn.vercel.app'
+    : 'http://localhost:5173',
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
+  exposedHeaders: ['Set-Cookie']
 }))
+
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use(cookieParser())
@@ -25,10 +33,7 @@ app.get('/', (_,res) => {
 
 app.use(notFound)
 app.use(errorHandler)
+
 app.listen(port, ()=> {
   console.log(`server ok ${port}`)
 })
-
-
-
-// origin: process.env.NODE_ENV === 'production' ? 'https://authentication-six-psi.vercel.app' : 'http://localhost:5173',
