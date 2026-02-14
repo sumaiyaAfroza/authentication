@@ -1,22 +1,21 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import {useNavigate} from "react-router";
-import {setCredentials} from "../slice/auth.slice.js";
+import { useNavigate } from "react-router";
+import { setCredentials } from "../slice/auth.slice.js";
 import FormContainer from "../components/Form.container.jsx";
 import Loader from "../components/Loader.jsx";
-import {useUpdateProfileMutation} from "../slice/user.api.slice.js";
+import { useUpdateProfileMutation } from "../slice/user.api.slice.js";
 
-
-const updateProfile = () => {
+const UpdateProfile = () => {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [currentPassword, setCurrentPassword] = useState(''); // ✅ এটা যোগ করুন
+
   const navigate = useNavigate()
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.auth);
-  const [updateProfile, { isLoading }] =  useUpdateProfileMutation()
+  const [updateProfile, { isLoading }] = useUpdateProfileMutation()
 
   useEffect(() => {
     setName(userInfo.name);
@@ -25,29 +24,33 @@ const updateProfile = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    if (password !== confirmPassword) {
-      toast.error('Passwords do not match');
-    } else {
-      try {
-        const res = await updateProfile({
-          _id: userInfo._id,
-          name,
-          email,
-          password,
-        }).unwrap();
-        console.log(res);
-        dispatch(setCredentials(res));
-        navigate('/')
-        toast.success('Profile updated successfully');
-      } catch (err) {
-        toast.error(err?.data?.message || err.error);
-      }
+
+    // ✅ Current password check
+    if (!currentPassword) {
+      toast.error('Current password is required');
+      return;
+    }
+
+    try {
+      const res = await updateProfile({
+        currentPassword, // ✅ এটা পাঠান
+        name,
+        email
+      }).unwrap();
+
+      dispatch(setCredentials(res));
+      navigate('/')
+      toast.success('Profile updated successfully');
+    } catch (err) {
+      toast.error(err?.data?.message || err.error);
     }
   };
 
   return (
     <FormContainer>
-      <h1 className='text-3xl font-bold text-center mb-6 text-gray-800'>Update Profile</h1>
+      <h1 className='text-3xl font-bold text-center mb-6 text-gray-800'>
+        Update Profile
+      </h1>
 
       <form onSubmit={submitHandler}>
         {/* Name Field */}
@@ -82,33 +85,19 @@ const updateProfile = () => {
           />
         </div>
 
-        {/* Password Field */}
+        {/* Current Password Field - ✅ এটা যোগ করুন */}
         <div className='mb-4'>
-          <label htmlFor='password' className='block text-gray-700 font-semibold mb-2'>
-            Password
+          <label htmlFor='currentPassword' className='block text-gray-700 font-semibold mb-2'>
+            Current Password (Required)
           </label>
           <input
             type='password'
-            id='password'
-            placeholder='Enter password'
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            id='currentPassword'
+            placeholder='Enter current password'
+            value={currentPassword}
+            onChange={(e) => setCurrentPassword(e.target.value)}
             className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent'
-          />
-        </div>
-
-        {/* Confirm Password Field */}
-        <div className='mb-6'>
-          <label htmlFor='confirmPassword' className='block text-gray-700 font-semibold mb-2'>
-            Confirm Password
-          </label>
-          <input
-            type='password'
-            id='confirmPassword'
-            placeholder='Confirm password'
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+            required
           />
         </div>
 
@@ -121,10 +110,9 @@ const updateProfile = () => {
           {isLoading ? 'Updating...' : 'Update'}
         </button>
 
-
         {isLoading && (
           <div className='mt-4'>
-        <Loader/>
+            <Loader/>
           </div>
         )}
       </form>
@@ -132,4 +120,4 @@ const updateProfile = () => {
   );
 };
 
-export default updateProfile;
+export default UpdateProfile;
